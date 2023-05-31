@@ -89,12 +89,16 @@ timer_elapsed (int64_t then) {
 
 /* Suspends execution for approximately TICKS timer ticks. */
 void
-timer_sleep (int64_t ticks) {
-	int64_t start = timer_ticks ();
-
-	ASSERT (intr_get_level () == INTR_ON);
-	while (timer_elapsed (start) < ticks)
-		thread_yield ();
+timer_sleep (int64_t ticks) {	// 타이머의 틱 수, 프로세스가 대기해야 할 시간
+	int64_t start = timer_ticks ();	// 타이머 틱 값을 start변수에 저장(Start변수는 대기 시작 시간)
+	
+	// ASSERT매크로 -> 주어진 조건 참이 아닌 경우 프로그램 중단
+	ASSERT (intr_get_level () == INTR_ON);	// `intr_get_level`는 현재 인터럽트 상태 확인 함수/INTR_ON상태일 때 이 함수 실행됨
+	
+	while (timer_elapsed (start) < ticks)	//	`timer_elapsed `함수로 start와 현재 타이머 틱 값 사이 경과시간 계산 
+		// 계산된 경과 시간이 ticks보다 작을 동안, 즉 프로세스가 대기해야 할 시간이 남아있는 동안에는 thread_yield() 함수를 호출
+		// thread_yield ();	
+		thread_sleep(start+ticks);
 }
 
 /* Suspends execution for approximately MS milliseconds. */
@@ -120,12 +124,14 @@ void
 timer_print_stats (void) {
 	printf ("Timer: %"PRId64" ticks\n", timer_ticks ());
 }
-
+
 /* Timer interrupt handler. */
 static void
 timer_interrupt (struct intr_frame *args UNUSED) {
 	ticks++;
 	thread_tick ();
+
+	thread_wakeup(ticks);
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer

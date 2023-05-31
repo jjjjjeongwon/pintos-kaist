@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "synch.h": "c",
+    "vaddr.h": "c",
+    "intrinsic.h": "c",
+    "__threading_support": "c",
+    "__availability": "c",
+    "version": "c"
+  }
+}

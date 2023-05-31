@@ -66,7 +66,7 @@ list_init (struct list *list) {
 /* Returns the beginning of LIST.  */
 struct list_elem *
 list_begin (struct list *list) {
-	ASSERT (list != NULL);
+	ASSERT (list != NULL);	//list의 주소값이 없는 경우(애초에 배정된 적이 없음)
 	return list->head.next;
 }
 
@@ -267,7 +267,7 @@ list_pop_back (struct list *list) {
    Undefined behavior if LIST is empty. */
 struct list_elem *
 list_front (struct list *list) {
-	ASSERT (!list_empty (list));
+	ASSERT (!list_empty (list));	//list가 비어있는 경우
 	return list->head.next;
 }
 

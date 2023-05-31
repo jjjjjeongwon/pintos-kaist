@@ -5,6 +5,7 @@
 #include <list.h>
 #include <stdint.h>
 #include "threads/interrupt.h"
+
 #ifdef VM
 #include "vm/vm.h"
 #endif
@@ -91,9 +92,17 @@ struct thread {
 	enum thread_status status;          /* Thread state. */
 	char name[16];                      /* Name (for debugging purposes). */
 	int priority;                       /* Priority. */
+	int origin_priority;
+	int64_t wakeup_tick;	/*tick till wake up*/
 
+	//ppt_p.44의 thread 구조체 내 필요한 변수들 추가 
+	struct lock *wait_on_lock;	
+	struct list donations;	//donations는 리스트 
+	struct list_elem d_elem;	// d_elem는 리스트의 요소
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
+	
+
 
 #ifdef USERPROG
 	/* Owned by userprog/process.c. */
@@ -135,6 +144,8 @@ void thread_yield (void);
 
 int thread_get_priority (void);
 void thread_set_priority (int);
+
+void test_max_priority(void);
 
 int thread_get_nice (void);
 void thread_set_nice (int);

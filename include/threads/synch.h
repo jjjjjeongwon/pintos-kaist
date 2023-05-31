@@ -10,10 +10,10 @@ struct semaphore {
 	struct list waiters;        /* List of waiting threads. */
 };
 
-void sema_init (struct semaphore *, unsigned value);
-void sema_down (struct semaphore *);
-bool sema_try_down (struct semaphore *);
-void sema_up (struct semaphore *);
+void sema_init (struct semaphore *, unsigned value);	//세마포어를 value로 초기화하는 함수
+void sema_down (struct semaphore *);	//semaphore를 요청하고 획득했을 때 value를 1 낮춤
+bool sema_try_down (struct semaphore *);	
+void sema_up (struct semaphore *);	//semaphore를 반환하고 value를 1 높임
 void sema_self_test (void);
 
 /* Lock. */
@@ -37,6 +37,9 @@ void cond_init (struct condition *);
 void cond_wait (struct condition *, struct lock *);
 void cond_signal (struct condition *, struct lock *);
 void cond_broadcast (struct condition *, struct lock *);
+
+void donate_priority(void);
+void refresh_priority(void);
 
 /* Optimization barrier.
  *

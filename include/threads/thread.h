@@ -29,6 +29,14 @@ typedef int tid_t;
 #define PRI_DEFAULT 31                  /* Default priority. */
 #define PRI_MAX 63                      /* Highest priority. */
 
+/* project 2*/
+#define STDIN_FILENO 0
+#define STDOUT_FILENO 1
+
+/* File descriptor*/
+#define FD_MIN 2  /* Lowest File descriptor */
+#define FD_MAX 63 /* Highest File descriptor */
+
 /* A kernel thread or user process.
  *
  * Each thread structure is stored in its own 4 kB page.  The
@@ -95,13 +103,18 @@ struct thread {
 	int origin_priority;
 	int64_t wakeup_tick;	/*tick till wake up*/
 
+	int exit_status;	/* 시스템 종료 상태 */
+
 	//ppt_p.44의 thread 구조체 내 필요한 변수들 추가 
 	struct lock *wait_on_lock;	
 	struct list donations;	//donations는 리스트 
 	struct list_elem d_elem;	// d_elem는 리스트의 요소
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
-	
+
+	/*file descriptor 구현용*/
+	struct file *fdt[64]; // file descriptor table의 시작주소 가리키게 초기화
+	int next_fd;	// fd table에 open spot의 index
 
 
 #ifdef USERPROG

@@ -215,29 +215,40 @@ outputs:
 'to'
 'tokenize.'
 */
+
+/*
+문자열을 지정된 구분자(delimiters)를 기준으로 토큰으로 분리하는 역할
+분리된 토큰의 상태를 저장하기 위해 save_ptr을 사용
+*/
 char *
-strtok_r (char *s, const char *delimiters, char **save_ptr) {
+strtok_r (char *s, const char *delimiters, char **save_ptr) {	
 	char *token;
 
 	ASSERT (delimiters != NULL);
 	ASSERT (save_ptr != NULL);
 
 	/* If S is nonnull, start from it.
-	   If S is null, start from saved position. */
+	   If S is null, start from saved position. 
+	   만약 s가 NULL이라면, save_ptr에 저장된 이전의 위치에서 시작
+	   */
 	if (s == NULL)
 		s = *save_ptr;
 	ASSERT (s != NULL);
 
-	/* Skip any DELIMITERS at our current position. */
+	/* Skip any DELIMITERS at our current position.
+	현재 위치에서 delimiters에 포함된 문자 중 하나를 찾을 때 까지 반복
+	 */
 	while (strchr (delimiters, *s) != NULL) {
 		/* strchr() will always return nonnull if we're searching
 		   for a null byte, because every string contains a null
-		   byte (at the end). */
+		   byte (at the end).
+		   현재 위치가 널 바이트('\0')라면, 토큰을 더 이상 찾을 수 없으므로 NULL을 반환하고, save_ptr에 현재 위치를 저장
+		    */
 		if (*s == '\0') {
 			*save_ptr = s;
 			return NULL;
 		}
-
+		/* 다음 문자로 이동 */
 		s++;
 	}
 

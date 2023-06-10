@@ -223,13 +223,21 @@ thread_create (const char *name, int priority,
 	t->tf.cs = SEL_KCSEG;
 	t->tf.eflags = FLAG_IF;
 
+	/*File Descriptor 테이블 메모리 할당*/
+	t->fdt[0] = palloc_get_page(PAL_ZERO);
+
+	/*포인터가 File Descriptor 테이블의 시작주소를 가리키도록 초기화*/
+	t->fdt[0] = STDIN_FILENO;
+	t->fdt[1] = STDOUT_FILENO;
+
+	t->next_fd = 2;
+
 	/* Add to run queue. */
 	thread_unblock (t);
 	// 현재 스레드와 새로 삽입된 스레드 우선순위 비교해서 새로 들어오는게 더 크면
 	if(thread_current()->priority < t->priority){
 		thread_yield();
 	}
-	
 
 	return tid;
 }
@@ -451,6 +459,8 @@ init_thread (struct thread *t, const char *name, int priority) {
 	t->origin_priority = priority;
 	list_init(&t->donations);
 	t->wait_on_lock = NULL;
+
+	/* file descriptor관련 필드*/
 
 	t->magic = THREAD_MAGIC;
 }

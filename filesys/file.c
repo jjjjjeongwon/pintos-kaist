@@ -48,7 +48,9 @@ file_duplicate (struct file *file) {
 	return nfile;
 }
 
-/* Closes FILE. */
+/* Closes FILE.
+프로세스가 종료될 때, 메모리 누수 방지를 위해 프로세스에 열린 모든 파일을 닫음
+ */
 void
 file_close (struct file *file) {
 	if (file != NULL) {

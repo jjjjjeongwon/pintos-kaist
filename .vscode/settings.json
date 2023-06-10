@@ -5,6 +5,20 @@
     "intrinsic.h": "c",
     "__threading_support": "c",
     "__availability": "c",
-    "version": "c"
+    "version": "c",
+    "syscall.h": "c",
+    "*.inc": "cpp",
+    "__config": "cpp",
+    "__locale": "cpp",
+    "cstdlib": "cpp",
+    "memory_resource": "cpp",
+    "locale": "cpp",
+    "ostream": "cpp",
+    "system_error": "cpp",
+    "typeinfo": "cpp",
+    "__string": "cpp",
+    "concepts": "cpp",
+    "type_traits": "cpp",
+    "thread": "c"
   }
 }
